@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance Eligibility Checker</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .form-header h1 {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .form-header p {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        color: #333;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+        font-family: inherit;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-check {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-check:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-reset {
+        background: #f0f0f0;
+        color: #333;
+        border: 2px solid #e0e0e0;
+      }
+
+      .btn-reset:hover {
+        background: #e0e0e0;
+      }
+
+      .result-container {
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 10px;
+        display: none;
+        animation: slideIn 0.3s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result-container.show {
+        display: block;
+      }
+
+      .result-container.eligible {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        color: #155724;
+      }
+
+      .result-container.not-eligible {
+        background: #f8d7da;
+        border: 2px solid #dc3545;
+        color: #721c24;
+      }
+
+      .result-message {
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .result-details {
+        font-size: 14px;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      input.is-invalid {
+        border-color: #e74c3c;
+      }
+
+      .info-box {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 25px;
+        font-size: 14px;
+        color: #1565c0;
+      }
+
+      .info-box strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+
+        .button-group {
+          grid-template-columns: 1fr;
+        }
+
+        .form-header h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-header">
+        <h1>Attendance Checker</h1>
+        <p>Check Examination Eligibility</p>
+      </div>
+
+      <div class="info-box">
+        <strong>Eligibility Requirement:</strong>
+        Attendance must be 75% or above to appear for the examination.
+      </div>
+
+      <form id="attendanceForm">
+        <div class="form-group">
+          <label for="studentName">Student Name *</label>
+          <input
+            type="text"
+            id="studentName"
+            name="studentName"
+            placeholder="Enter your full name"
+          />
+          <div class="error-message" id="nameError">Please enter your name</div>
+        </div>
+
+        <div class="form-group">
+          <label for="attendancePercentage">Attendance Percentage *</label>
+          <input
+            type="number"
+            id="attendancePercentage"
+            name="attendancePercentage"
+            placeholder="Enter attendance %"
+            min="0"
+            max="100"
+            step="0.01"
+          />
+          <div class="error-message" id="attendanceError">
+            Please enter a valid attendance percentage (0-100)
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn-check" onclick="checkEligibility()">
+            Check Eligibility
+          </button>
+          <button type="reset" class="btn-reset" onclick="resetResult()">
+            Clear
+          </button>
+        </div>
+      </form>
+
+      <div class="result-container" id="resultContainer">
+        <div class="result-message" id="resultMessage"></div>
+        <div class="result-details" id="resultDetails"></div>
+      </div>
+    </div>
+
+    <script>
+      /**
+       * Check attendance eligibility
+       * If attendance >= 75%, student is eligible
+       * Otherwise, student is not eligible
+       */
+      function checkEligibility() {
+        // Get input values
+        const studentName = document.getElementById("studentName").value.trim();
+        const attendancePercentage = parseFloat(
+          document.getElementById("attendancePercentage").value,
+        );
+
+        // Reset error messages
+        resetErrors();
+
+        // Validate inputs
+        let isValid = true;
+
+        // Validate name
+        if (studentName === "") {
+          showError("nameError", "studentName");
+          isValid = false;
+        }
+
+        // Validate attendance percentage
+        if (
+          isNaN(attendancePercentage) ||
+          attendancePercentage < 0 ||
+          attendancePercentage > 100
+        ) {
+          showError("attendanceError", "attendancePercentage");
+          isValid = false;
+        }
+
+        if (!isValid) {
+          return;
+        }
+
+        // Display result
+        const resultContainer = document.getElementById("resultContainer");
+        const resultMessage = document.getElementById("resultMessage");
+        const resultDetails = document.getElementById("resultDetails");
+
+        resultContainer.classList.remove("eligible", "not-eligible");
+
+        if (attendancePercentage >= 75) {
+          // Eligible
+          resultContainer.classList.add("eligible");
+          resultMessage.textContent = `Welcome ${studentName}, you are eligible to appear for the examination.`;
+          resultDetails.textContent = `Your attendance: ${attendancePercentage}%`;
+        } else {
+          // Not eligible
+          resultContainer.classList.add("not-eligible");
+          resultMessage.textContent = `Sorry ${studentName}, you are not eligible to appear for the examination.`;
+          resultDetails.textContent = `Your attendance: ${attendancePercentage}% (Required: 75% or above)`;
+        }
+
+        resultContainer.classList.add("show");
+      }
+
+      /**
+       * Show error message and add invalid class to input
+       */
+      function showError(errorElementId, inputElementId) {
+        const errorElement = document.getElementById(errorElementId);
+        const inputElement = document.getElementById(inputElementId);
+
+        if (errorElement) {
+          errorElement.classList.add("show");
+        }
+        if (inputElement) {
+          inputElement.classList.add("is-invalid");
+        }
+      }
+
+      /**
+       * Reset all error messages
+       */
+      function resetErrors() {
+        const errorMessages = document.querySelectorAll(".error-message");
+        const inputFields = document.querySelectorAll(
+          'input[type="text"], input[type="number"]',
+        );
+
+        errorMessages.forEach((error) => {
+          error.classList.remove("show");
+        });
+
+        inputFields.forEach((input) => {
+          input.classList.remove("is-invalid");
+        });
+      }
+
+      /**
+       * Reset result display
+       */
+      function resetResult() {
+        const resultContainer = document.getElementById("resultContainer");
+        resultContainer.classList.remove("show");
+        resetErrors();
+      }
+
+      /**
+       * Allow checking eligibility by pressing Enter
+       */
+      document
+        .getElementById("attendanceForm")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            checkEligibility();
+          }
+        });
+
+      /**
+       * Clear error on input
+       */
+      document
+        .getElementById("studentName")
+        .addEventListener("input", function () {
+          if (this.value.trim() !== "") {
+            this.classList.remove("is-invalid");
+            document.getElementById("nameError").classList.remove("show");
+          }
+        });
+
+      document
+        .getElementById("attendancePercentage")
+        .addEventListener("input", function () {
+          if (this.value !== "") {
+            const val = parseFloat(this.value);
+            if (!isNaN(val) && val >= 0 && val <= 100) {
+              this.classList.remove("is-invalid");
+              document
+                .getElementById("attendanceError")
+                .classList.remove("show");
+            }
+          }
+        });
+    </script>
+  </body>
+</html>

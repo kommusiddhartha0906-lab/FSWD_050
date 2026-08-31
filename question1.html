@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Banking Registration Form</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .form-header h1 {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .form-header p {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="number"],
+      textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+        font-family: inherit;
+      }
+
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="password"]:focus,
+      input[type="number"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .form-row .form-group {
+        margin-bottom: 0;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 12px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      input.is-invalid,
+      textarea.is-invalid {
+        border-color: #e74c3c;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        cursor: pointer;
+      }
+
+      .checkbox-group label {
+        margin-bottom: 0;
+        font-weight: 400;
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-reset {
+        background: #f0f0f0;
+        color: #333;
+        border: 2px solid #e0e0e0;
+      }
+
+      .btn-reset:hover {
+        background: #e0e0e0;
+      }
+
+      .success-message {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        color: #155724;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .button-group {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-header">
+        <h1>Registration Form</h1>
+        <p>Online Banking Account Registration</p>
+      </div>
+
+      <div class="success-message" id="successMessage">
+        Registration completed successfully!
+      </div>
+
+      <form id="registrationForm">
+        <div class="form-group">
+          <label for="customerName">Customer Name *</label>
+          <input
+            type="text"
+            id="customerName"
+            name="customerName"
+            placeholder="Enter your full name"
+          />
+          <div class="error-message" id="nameError">
+            Only alphabets and spaces are allowed
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="accountNumber">Account Number *</label>
+            <input
+              type="text"
+              id="accountNumber"
+              name="accountNumber"
+              placeholder="12-digit number"
+            />
+            <div class="error-message" id="accountError">
+              Account number must be exactly 12 digits
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="panNumber">PAN Number *</label>
+            <input
+              type="text"
+              id="panNumber"
+              name="panNumber"
+              placeholder="AAAPA1234A"
+            />
+            <div class="error-message" id="panError">
+              Invalid PAN format (e.g., AAAPA1234A)
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="emailId">E-mail ID *</label>
+          <input
+            type="email"
+            id="emailId"
+            name="emailId"
+            placeholder="Enter your email"
+          />
+          <div class="error-message" id="emailError">Invalid email format</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password *</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="At least 8 characters"
+            />
+            <div class="error-message" id="passwordError">
+              Password must be at least 8 characters
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password *</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Re-enter password"
+            />
+            <div class="error-message" id="confirmError">
+              Passwords do not match
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <textarea
+            id="address"
+            name="address"
+            placeholder="Enter your address"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            placeholder="10-digit phone number"
+          />
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="agreeTerms" name="agreeTerms" />
+          <label for="agreeTerms">I agree to the Terms and Conditions</label>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="btn-submit">Submit</button>
+          <button type="reset" class="btn-reset">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="question2_validation.js"></script>
+  </body>
+</html>
