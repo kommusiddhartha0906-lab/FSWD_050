@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Educational Qualification</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            width: 500px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttons input {
+            width: auto;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Educational Qualification</h2>
+
+    <form>
+
+        <label>10th / SSC School Name</label>
+        <input type="text" name="school">
+
+        <label>10th Percentage</label>
+        <input type="number" name="ssc_percentage">
+
+        <label>12th / Intermediate College</label>
+        <input type="text" name="college">
+
+        <label>12th Percentage</label>
+        <input type="number" name="inter_percentage">
+
+        <label>Degree</label>
+        <select name="degree">
+            <option value="">Select Degree</option>
+            <option value="B.Tech">B.Tech</option>
+            <option value="B.Sc">B.Sc</option>
+            <option value="B.Com">B.Com</option>
+            <option value="BCA">BCA</option>
+            <option value="BA">BA</option>
+        </select>
+
+        <label>Branch / Specialization</label>
+        <input type="text" name="branch">
+
+        <label>CGPA / Percentage</label>
+        <input type="text" name="cgpa">
+
+        <label>Year of Passing</label>
+        <input type="number" name="year">
+
+        <div class="buttons">
+            <input type="button" value="Back" onclick="history.back()">
+            <input type="submit" value="Submit">
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>
